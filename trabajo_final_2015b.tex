@@ -1,0 +1,288 @@
+\documentclass[10pt, oneside]{article}
+\usepackage[letterpaper, margin=1.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{color}
+\usepackage[spanish, activeacute]{babel}
+
+\begin{document}
+ \title{Simulaci\'on}
+ \author{Trabajo Final}
+ \date{Entrega: 10-Dic-15 de 8:00 a 8:30 AM.}
+  \maketitle
+
+\addtolength{\headheight}{10pt}
+\addtolength{\textwidth}{80pt}
+
+%**********************
+\hyphenation{ga-mma}
+%nuevos comandos:
+\newcommand{\bin}[2]{
+ \left(
+ \begin{array}{@{}c@{}}
+  #1 \\ #2
+ \end{array}
+\right) }
+
+%***********************
+\section*{Modelos de P'erdida Agregada en Riesgo de Cr'edito.}
+
+\subsection*{Introducci'on a los Modelos de P'erdida Agregada}
+
+\noindent
+La forma de modelar las p'erdidas de una cartera crediticia es muy semejante a la forma en que las aseguradoras modelan las p'erdidas que sufren a consecuencia de la realizaci'on de los siniestros cubiertos en sus p'olizas, las cuales utilizan modelos de p'erdidas agregadas; modelos que han sido muy estudiados en lo que se llama la \emph{teor'ia de riesgo}.\\
+
+\noindent
+Un \emph{modelo de p'erdida agregada}, permite obtener la p'erdida total de un conjunto de individuos, para ello existen dos maneras de agregar las p'erdidas individuales, a saber:  \emph{modelo individual} y \emph{modelo colectivo}.
+
+\begin{enumerate}
+\item \textbf{\emph{Modelo Individual}}: 
+En el modelo individual la p'erdida agregada se define por la siguiente variable aleatoria:
+
+\[L = \sum_{k=1}^{n} Y_k\]
+
+Donde: ``$n$'' es el n'umero total de individuos y ``$Y_k$'' es la variable aleatoria del monto de la p'erdida incurrida por el $k$-'esimo individuo (donde el valor de la variable puede ser cero en caso de que el individuo no hubiese registrado p'erdida). En este modelo cada una de las ``$Y_k$'' pueden tener una distribuci'on diferente.\\
+
+%%%
+
+En el caso de Riesgo de Cr'edito, dado que la p'erdida s'olo se registra si el individuo incumple al t'ermino del horizonte de tiempo analizado, se tiene que la variable de p'erdida individual ($Y_k$) es una variable aleatoria dicot'omica que toma el valor de cero si el cr'edito no incumple, o toma el valor del monto del cr'edito en caso de incumplir el acreditado, por lo tanto dicha variable aleatoria queda definida como sigue:\\
+
+\[Y_k = I_k\;f_k\;\;\;\;\;\mbox{con:}\;\;\;\;\;I_k\sim\mbox{Bernoulli}(p_k)\]
+
+\indent  Donde:\\
+\indent \indent $I_k$: Variable indicadora del evento de incumplimiento\footnote{i.e. variable que toma el valor de uno si el $k$-'esimo acreditado incumple.}.\\
+\indent \indent $p_k$: Probabilidad de incumplimiento del $k$-'esimo acreditado.\\
+\indent \indent $f_k$: Monto prestado al $k$-'esimo acreditado.\\
+
+\noindent
+Para que la variable aleatoria de las p'erdidas de la cartera quede bien definida, se debe de considerar una cierta estructura de dependencia entre los incumplimientos de la cartera (i.e. la dependencia entre las variables indicadoras ``$I_k$''), la cual se puede modelar con un modelo en el que se calibre la estructura de dependencia con las correlaciones lineales entre las variables indicadoras (i.e. con $\rho_{i,j} = Corr(I_i, I_j)$ ; $\forall i \neq j$).\\
+
+\noindent
+
+
+%%%
+
+Para obtener la distribuci'on de las p'erdidas agregadas, bajo este modelo, se tiene que calcular cada uno de los posibles valores de ``$L$'', asociando a cada uno de 'estos una probabilidad. Tanto el valor ``$L$'', como la probabilidad asociada a ese valor va a estar determinado por la combinaci'on de los posibles valores que pueda tomar cada una de las ``$n$'' variables de p'erdida individuales (``$Y_k$'').
+
+\item \textbf{\emph{Modelo Colectivo}}: 
+En el modelo colectivo la p'erdida agregada se define por la siguiente variable aleatoria:
+\[
+L = \sum_{k=1}^{K} Y_k
+\]
+Donde: ``$K$'' es la variable aleatoria del n'umero de individuos que incurrieron en p'erdidas y ``$Y_k$'' es la variable aleatoria del monto de la p'erdida incurrida por el $k$-'esimo individuo que registr'o p'erdida.\\
+
+A diferencia del modelo individual, el n'umero de t'erminos en la sumatoria que define a ``$L$'' ya no es determin'istico y las variables ``$Y_k$'' ya no pueden valer cero, puesto que representan los montos de cada una de las p'erdidas registradas.\\
+
+Este es un modelo muy utilizado en el 'ambito de los seguros para calcular las indemnizaciones surgidas por la realizaci'on de siniestros cubiertos en una cartera de asegurados, por lo que se dice que este modelo sigue un enfoque \emph{actuarial}.\\
+
+En el caso de Riesgo de Cr'edito, dado que la p'erdida s'olo se registra si el individuo incumple al t'ermino del horizonte de tiempo analizado, se tiene que la variable aleatoria $K$ se define como la sumatoria de las $n$ variables indicadoras de incumplimiento ($I_k$), y la colecci'on de las variables de p'erdida incurrida ($Y_k$; $k=1,\ldots, K$) se definir'ian como un subconjunto de $K$ elementos seleccionados aleatoriamente (con probabilidades equiprobables de seleccionar cada elemento del conjunto) del conjunto que comprende todos los montos de los $n$ cr'editos de la cartera (i.e. $f_k$; $k=1,\ldots, n$). Esto es:\\
+
+\[K=\sum_{k=1}^{n} I_k\;\;\;\;\;\mbox{con:}\;\;\;\;\;I_k\sim\mbox{Bernoulli}(p_k)\]
+\[(Y_1,\ldots, Y_K) = (f_{D_1},\ldots, f_{D_K}) \;\;\;\;\;\mbox{con:}\;\;\;\;\;\{D_1,\ldots, D_K\} \subset \{1, \ldots, n\} \]
+
+\indent  Donde:\\
+\indent \indent $I_k$: Variable indicadora del evento de incumplimiento\footnote{i.e. variable que toma el valor de uno si el $k$-'esimo acreditado incumple.}.\\
+\indent \indent $p_k$: Probabilidad de incumplimiento del $k$-'esimo acreditado.\\
+\indent \indent $D_k$: Variable aleatoria que denota al n'umero de acreditado que incumpli'o.\\
+\indent \indent $f_k$: Monto prestado al $k$-'esimo acreditado.\\
+
+\noindent
+Al igual que en el \emph{modelo individual}, para que la variable aleatoria del n'umero de incumplimientos de la cartera ($K$) quede bien definida, se debe de considerar una cierta estructura de dependencia entre los incumplimientos de la cartera (i.e. la dependencia entre las variables indicadoras ``$I_k$''), la cual se puede modelar con un modelo en el que se calibre la estructura de dependencia con las correlaciones lineales entre las variables indicadoras (i.e. con $\rho_{i,j} = Corr(I_i, I_j)$ ; $\forall i \neq j$).\\\\
+
+%%%
+
+\end{enumerate}
+
+\subsection*{Modelos de P'erdida Agregada en Riesgo de Cr'edito con un 'unico grupo homogeneo de riesgo}
+
+\begin{enumerate}
+
+\item{\textbf{Modelo Individual}}: Si se hace el supuesto de que todos los acreditados comparten perfiles similares de riesgo (i.e. todos pertenecen a un mismo grupo homog'eneo de riesgo), entonces se tiene que todos los acreditados comparten las mismas probabilidades de incumplimiento ($p$) y las mismas correlaciones lineales de incumplimientos ($\rho$), quedando la variable aleatoria de p'erdida definida como:\\
+
+\[L = \sum_{k=1}^{n} I_k\;f_k\;\;\;\;\;\mbox{con:}\;\;\;\;\;I_k\sim\mbox{Bernoulli}(p) \;\; \forall k \;\;\;\mbox{y}\;\;\;\;\; \rho_{i,j} =\rho \;\;\; \forall i \neq j\]
+
+\noindent
+Una forma eficiente de simular la v.a. $L$ es a trav'es de \emph{variables aleatorias latentes} definidas con un \emph{modelo de factor}. Esto es:\\
+
+\begin{equation}\label{vlatente}
+I_i = 1_{X_i\leq u} \;\;\;\mbox{con:}\;\;\; X_i = \sqrt{\widetilde{\rho}} Z_0 + \sqrt{1-\widetilde{\rho}} Z_i \;\;\;\mbox{y con:}\;\;\; \{ Z_i \}_{i=0}^{m}  \sim iid \; N(0,1)
+\end{equation}
+
+\noindent
+Con la siguiente calibraci'on:
+
+\[u = \Phi^{-1}(p) \;\;\mbox{y}\;\; \widetilde{\rho} = \{r : \Phi_{(2)}(u,u ;r) =  p^2+ \rho \cdot p(1-p) \}\]
+\noindent
+Donde $ \Phi_{(2)}$ representa la \emph{funci'on de distribuci'on} conjunta de un vector aleatorio bivariado con distribuci'on \emph{normal est'andar}.\\
+
+\noindent
+Por lo tanto, para poder simular una realizaci'on de la variable $L$ se necesitar'ia primeramente calibrar los par'ametros $u$ y $\widetilde{\rho}$, luego simular las $n$ \emph{variables latentes} para obtener sus correspondientes \emph{variables indicadoras}, para finalmente multiplicarlas por sus respectivos montos y realizar la sumatoria.
+
+\item{\textbf{Modelo Colectivo}}: Si se hace el supuesto de que todos los acreditados comparten perfiles similares de riesgo (i.e. todos pertenecen a un mismo grupo homog'eneo de riesgo), entonces se tiene que todos los acreditados comparten las mismas probabilidades de incumplimiento ($p$) y las mismas correlaciones lineales de incumplimientos ($\rho$), quedando la variable aleatoria de p'erdida definida como:\\
+
+\[L = \sum_{k=1}^{K} f_{D_k}\;\;\;\;\;\mbox{con:}\;\;\;\;\; K=\sum_{k=1}^{n} I_k\;\;\;\;\;\mbox{ y con:}\;\;\;\;\;I_k\sim\mbox{Bernoulli}(p) \;\; \forall k \;\; \mbox{y}\;\; \{D_1,\ldots, D_K\} \subset \{1, \ldots, n\}\]
+
+\noindent
+Donde $\{D_1,\ldots, D_K\}$ es una \emph{muestra sin remplazo} de $K$ elementos del conjunto $\{1, \ldots, n\}$, donde todos los elementos del conjunto comparten la misma probabilidad de ser seleccionados.\\
+
+Una forma eficiente de simular el n'umero de incumplimientos ($K$) es a trav'es de la suma de variables indicadoras de \emph{variables latentes}, donde 'estas 'ultimas variables se modelan con un \emph{modelo de factor} (ver ecuaci'on \ref{vlatente}), de tal forma que si se condiciona el factor ($Z_0$) de las $n$ \emph{variables latentes} ($X_i$'s) entonces se tiene que dichas \emph{variables latentes} son mutuamente independientes, propiedad que se le da el nombre de \emph{independencia condicional}, por lo que la suma de las variables indicadoras de estas \emph{variables latentes} condicionadas en su \emph{factor} se tiene que se distribuye \emph{Binomial} (por ser una sumatoria de v.a. \emph{Bernoullis} independientes), con par'ametros dados por el n'umero de acreditados ($n$) y por la probabilidad condicional al valor del \emph{factor} ($p(z_0)$). Esto es:\\
+
+\[K|Z_0 = z_0 \sim Binomial(n,p(z_0)) \;\;\;\mbox{con:}\;\;\; p(z_0) = Pr\{I_i = 1 | Z_0 = z_0\} =Pr\{X_i \leq u | Z_0 = z_0\} = \Phi \left( \frac{u-\sqrt{\widetilde{\rho}} z_0}{\sqrt{1-\widetilde{\rho}}} \right) \]
+
+\noindent
+Por lo tanto, para poder simular una realizaci'on de la variable $L$ se necesitar'ia primeramente calibrar los par'ametros $u$ y $\widetilde{\rho}$ (exactamente de la misma forma en que se hace bajo el \emph{modelo individual}), luego simular el \emph{factor} para poder simular la v.a. $K$ condicionada en el valor del factor simulado, para con ello simular la \emph{muestra sin remplazo} de $K$ elementos tomados del conjunto $\{f_1, \ldots, f_n\}$, para finalmente sumar dichos valores.\\
+
+\end{enumerate}
+
+\subsection*{Modelos de P'erdida Agregada en Riesgo de Cr'edito con varios grupos homogeneos de riesgo}
+
+\begin{enumerate}
+
+\item{\textbf{Modelo Individual}}: Si se hace el supuesto de que los acreditados se pueden agrupar en $m$ grupos homogeneos de riesgo, entonces se tiene que todos los acreditados pertenecientes a un mismo grupo comparten las mismas probabilidades de incumplimiento y las mismas correlaciones lineales de incumplimientos para cualquier pareja de acreditados tomada dentro del mismo grupo, quedando la variable aleatoria de p'erdida definida como:
+
+\[L = \sum_{j=1}^{m} L_j\;\;\;\;\;\mbox{con:}\;\;\;\;\;L_j = \sum_{k=1}^{n_j} I_k^{(j)}\;f_k^{(j)},\;\;\; I_k^{(j)}\sim\mbox{Bernoulli}(p_j) \;\;\;\;\;\mbox{y}\;\;\;\;\; Corr(I_k^{(j)}, I_i^{(j)}) =\rho_j \;\;\; \forall i \neq j\]
+
+\noindent D'onde:\\
+$j$: Sub'indice que denota al n'umero de grupo ($j \in \{ 1, \ldots, m\}$).\\
+$n_j$: N'umero de cr'editos del grupo $j$.\\
+$I_k^{(j)}$: Variable indicadora del incumplimiento del acreditado $k$ del grupo $j$.\\
+$f_k^{(j)}$: Monto del cr'edito del acreditado $k$ del grupo $j$.\\
+$p_j$: Probabilidad de incumplimiento de cualquier acreditado del grupo $j$.\\
+$\rho_j$: Correlaci'on lineal de incumplimiento para cualquier pareja de acreditados del grupo $j$ (llamada tambi'en \emph{correlaci'on intragrupo}).\\
+
+\noindent
+Adem'as de las \emph{correlaciones intragrupo} de incumplimiento, exiten correlaciones lineales para parejas de acreditados tomadas de grupos diferentes (llamadas tambi'en \emph{correlaciones extragrupo}), que tambi'en deben de ser consideradas para modelar todas las posibles correlaciones que pueden existir. Esto es:
+
+\[Corr(I_k^{(j)}, I_r^{(i)}) = \rho_{j,i} \;\;\; \forall i \neq j \;\;\mbox{y}\;\; \forall k \neq r\]
+
+\noindent
+Al igual que en el caso de un 'unico grupo homogeneo de riesgo, se tiene que una forma eficiente de simular la v.a. $L$ es a trav'es de \emph{variables latentes} definidas con un \emph{modelo de factor}, pero ahora utilizando dos \emph{factores} (uno correspondiente a la componente \emph{sist'emica} y otro a la componente \emph{sectorial}), utilizando una 'unica correlaci'on ($\widetilde{\rho}$) entre cualquier pareja de \emph{variables latentes} que no pertenezcan al mismo grupo para simplificar el modelo, quedando definidas las variables de la siguiente forma:\footnote{N'otese que bajo este planteamiento existen $m+1$ correlaciones lineales de las \emph{variables latentes}, una correspondiente a la correlaci'on que que se mapea con las \emph{correlaciones extragrupo} y las otras $m$ con las correlaciones que se mapean con las \emph{correlaciones intragrupo}.}
+
+\begin{equation}\label{vlatente2}
+I_i^{(j)} = 1_{X_i^{(j)}\leq u} \;\;\;\mbox{con:}\;\;\; X_i^{(j)} = \sqrt{\widetilde{\rho}} \cdot Z_0 + \sqrt{\widetilde{\rho_j}-\widetilde{\rho}} \cdot Z_j + \sqrt{1-\widetilde{\rho_j}} \cdot \epsilon_i \;\;\;\mbox{y con:}\;\;\{ Z_j \}_{i=0}^{m} \;\mbox{y}\; \{ \epsilon_i \}_{i=1}^{n}  \sim iid \; N(0,1)
+\end{equation}
+
+\noindent
+Con la siguiente calibraci'on:
+
+\[u_j = \Phi^{-1}(p_j) \;\;\mbox{y}\;\; \widetilde{\rho_j} = \{r : \Phi(u_j,u_j ;r) =  p_j^2+ \rho_j \cdot p_j(1-p_j)\} \;\; \forall j \in \{1, \ldots, m\}\]
+
+\noindent
+La calibraci'on de $\widetilde{\rho}$ es mucho m'as compleja por todas las combinaciones posibles que puede haber de grupos, por lo que la calibraci'on se puede realizar por m'inimos cuadrados de las diferencias entre las probabilidades de incumplimiento conjunto de las parejas de diferentes grupos que se pueden armar. Esto es:
+
+\[\widetilde{\rho} = \left \{r : min \left \{\sum_{i<j} \left [ \Phi(u_i,u_j ;r) -   \left ( p_i p_j+ \rho_{i,j} \cdot \sqrt{p_i(1-p_i) p_j(1-p_j)} \right ) \right ]^2 \right\} \right\}\]
+
+\noindent
+Por lo tanto, para poder simular una realizaci'on de la variable $L$ se necesitar'ia primeramente calibrar los par'ametros $\{u_j\}_{j=1}^m$,  $\{\widetilde{\rho}\}_{j=1}^m$ y $\rho$, luego simular para cada grupo las $n_j$ \emph{variables latentes} para obtener sus correspondientes \emph{variables indicadoras}, para finalmente multiplicarlas por sus respectivos montos y realizar la sumatoria.
+
+\item{\textbf{Modelo Colectivo}}: Si se hace el supuesto de que los acreditados se pueden agrupar en $m$ grupos homog'eneos de riesgo, entonces se tiene que todos los acreditados pertenecientes a un mismo grupo comparten las mismas probabilidades de incumplimiento y las mismas correlaciones lineales de incumplimientos para cualquier pareja de acreditados tomada dentro del mismo grupo, quedando la variable aleatoria de p'erdida definida como:\\
+
+\[L = \sum_{j=1}^{m} L_j\;\;\mbox{con:}\;\; L_j = \sum_{k=1}^{K_j} f_{D_k}^{(j)}\;\;\mbox{con:}\;\; K_j=\sum_{k=1}^{n_j} I_k^{(j)}\]
+\[\mbox{ y con:}\;\;\;\;\;I_k^{(j)}\sim\mbox{Bernoulli}(p_j) \;\;\mbox{y}\;\; \{D_1,\ldots, D_{K_j}\} \subset \{1, \ldots, n_j\}\;;\;\; j = 1, \ldots, m\]
+
+\noindent
+Donde $\{D_1,\ldots, D_{K_j}\}$ es una \emph{muestra sin remplazo} de $K_j$ elementos del conjunto $\{1, \ldots, n_j\}$, donde todos los elementos del conjunto comparten la misma probabilidad de ser seleccionados.\\
+
+\noindent
+Una forma eficiente de simular el n'umero de incumplimientos de cada grupo ($K_j$) es a trav'es de la suma de variables indicadoras de \emph{variables aleatorias latentes}, donde 'estas 'ultimas variables se modelan con un \emph{modelo de factor} utilizando dos factores (ver ecuaci'on \ref{vlatente2}), de tal forma que si se condicionan los dos factores ($Z_0$ y $Z_j$) de las $n$ \emph{variables latentes} ($X_i$'s) entonces se tiene que dichas \emph{variables latentes} son mutuamente independientes, propiedad que se le da el nombre de \emph{independencia condicional}, por lo que la suma de las variables indicadoras de estas \emph{variables latentes} condicionadas en sus dos \emph{factores} se tiene que se distribuye \emph{Binomial} (por ser una sumatoria de v.a. \emph{Bernoullis} independientes), con par'ametros dados por el n'umero de acreditados del grupo que se trate ($n_j$) y por la probabilidad condicional al valor de los \emph{factores} que correspondan. Esto es:
+
+\[K_j|Z_0 = z_0, Z_j = z_j \sim Binomial(n_j,p(z_0, z_j)) \]
+\[\mbox{con:}\;\;\; p(z_0, z_j) = Pr\{I_i^{(j)} = 1 | Z_0 = z_0, Z_j = z_j\} =Pr\{X_i^{(j)} \leq u_j | Z_0 = z_0, Z_j = z_j\} = \Phi \left( \frac{u_j-\sqrt{\widetilde{\rho}}\;z_0-\sqrt{\widetilde{\rho_j}-\widetilde{\rho}} \;z_j}{\sqrt{1-\widetilde{\rho_j}}} \right) \]
+
+\noindent
+Por lo tanto, para poder simular una realizaci'on de la variable $L$ se necesitar'ia primeramente calibrar los par'ametros $\{u_j\}_{j=1}^m$,  $\{\widetilde{\rho}\}_{j=1}^m$ y $\rho$ (exactamente de la misma forma en que se hace bajo el \emph{modelo individual}), luego simular el \emph{factor sist'emico} y los \emph{factores sectoriales} para poder simular la v.a.'s $\{K_j\}_{j=1}^{m}$ condicionadas en los valores de los \emph{factores} simulados, para con ello simular la \emph{muestra sin remplazo} de $K_j$ elementos tomados del conjunto $\{f_1, \ldots, f_{n_j}\}$ y sumar dichos valores para obtener la p'erdida agregada del grupo ($L_j$), realiz'andose lo anterior para cada grupo (i.e. $j = 1, \ldots, m$) para finalmente sumar las p'erdidas agregadas de cada uno de los grupos.\\
+
+\end{enumerate}
+
+\subsection*{Descripci\'on del trabajo:}
+
+\noindent
+Se requiere realizar simulaciones de las p'erdidas agregadas de una cartera crediticia cuyos acreditados pertenecen a los siguientes grupos homogeneos de riesgo: \emph{industrial}, \emph{construcci'on}, \emph{comercio} y \emph{servicios}, cuyas \emph{probabilidades de incumplimiento} y \emph{correlaciones intragrupo} se encuentran definidos en el \textbf{cuadro \ref{tabla1}}, y donde los montos de dichos cr'editos se encuentran en el archivo \textbf{``montos\_creditos.xlsx"}. Para lo cual se pide utilizar un \emph{modelo de 2 factores} donde la correlaci'on de cualquier pareja de \emph{variables latentes} que pertenezcan a grupos diferentes sea de \textbf{0.5\%} (i.e. no se tiene que calibrar puesto que ya est'a dada). Utilizando los \textbf{dos modelos de p'erdida agregada} (\emph{modelo individual} y \emph{modelo colectivo}).\\
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|c|l|l|l|l|}
+\hline
+
+{Grupo} & 	{\bf industrial} 	&    {\bf construc.}	 &   {\bf comercio} 	& {\bf servicios}\\
+\hline
+\hline
+         $p_j$ & 0.70\%	& 0.90\%	& 0.65\%	& 0.60\%\\
+\hline
+         $\rho_j$ & 0.09\%	& 0.04\%	& 0.05\%	& 0.07\%\\
+\hline
+\end{tabular}
+\caption{Componentes de Riesgo de cada grupo.}\label{tabla1}
+\end{center}
+\end{table}
+
+\noindent
+Para lo cual se pide lo siguiente:
+
+\begin{enumerate}
+
+\item \label{itm:uno} 
+Calcular el tama\~no de simulaci'on para estimar la \emph{esperanza} de las p'erdidas agregadas de la cartera ($L$) con una presici'on de \textbf{10.00} y un nivel de confianza del 95\%.
+
+\item
+Implementar, bajo los \textbf{dos modelos de p'erdida agregada}, la simulaci'on de $L$ con el tama\~no de simulaci'on calculado en (\ref{itm:uno}).
+
+\item
+Realizar un An\'alisis Exploratorio de Datos de las $L$'s simuladas, bajo los \textbf{dos modelos de p'erdida agregada}, realizando lo siguiente:
+
+\begin{enumerate}
+
+\item
+Histograma y diagrama de caja y brazos (boxplot).
+
+\item
+Tabla con media, varianza, coeficiente de sesgo, coeficiente de kurtosis y cuartiles de la distribuci\'on emp\'irica simulada.
+
+\item
+\emph{VaR} al 95\%
+
+\end{enumerate}
+
+\item \label{preg_red_var}
+Implementar, bajo el \emph{modelo individual}, la t\'ecnicas de reducci'on de la varianza de \emph{variables antit'eticas}, calculando el tama\~no de la simulaci'on de la misma forma que se hizo en (\ref{itm:uno}), para implementar la simulaci'on que permita estimar la probabilidad de que las p'erdidas agregadas de la cartera excedan 2.5 veces su \emph{media te'orica}.
+
+\item
+Realizar una comparaci\'on entre el \emph{modelo individual}, el \emph{modelo colectivo} y el \emph{modelo individual} que utiliza las \emph{variables antit'eticas}, realizando el comparativo respecto a los siguientes aspectos:
+
+\begin{enumerate}
+\item Estimaciones de la caracter'istica que se busca estimar en (\ref{preg_red_var}).
+\item Tama\~nos de simulaci\'on.
+\item Tiempos de simulaci\'on.
+\end{enumerate}
+
+\end{enumerate}
+
+\subsection*{Observaciones a considerar:}
+
+\begin{enumerate}
+
+\item
+El trabajo a entregar deber\'a de estructurarse de la siguiente forma:
+
+\begin{enumerate}
+\item
+\emph{Resumen ejecutivo}: Descripci\'on general y resumida del problema y de las metodolog\'ias utilizadas (sin entrar a detalles), resumen puntual de los resultados (sin presentar tablas ni gr\'aficos).
+\item
+\emph{Introducci\'on}: Descripci\'on del problema e introducci\'on del trabajo realizado.
+\item
+\emph{Metodolog\'ia}: Descripci\'on detallada de las metodolog\'ias utilizadas (supuestos, insumos/par'ametros, salidas, pasos a seguir, etc.). Cada metodolog'ia deber'a de estar claramente referenciada a los c'odigos que se utilizaron en su implementaci'on los cuales deber'an de presentarse en la secci'on de \emph{Anexos}.
+\item
+\emph{Resultados}: Presentaci\'on detallada de resultados (sustentados con tablas y gr\'aficos).
+\item
+\emph{Anexos}: Presentaci\'on de todos los c'odigos utilizados en las implementaciones.
+\end{enumerate}
+
+\item
+El trabajo deber'a de presentarse impreso. 
+
+\item
+Un aspecto muy relevante a considerarse en la calificaci'on es la \textbf{claridad} del documento impreso que se entregue.
+
+\end{enumerate}
+
+\end{document}
