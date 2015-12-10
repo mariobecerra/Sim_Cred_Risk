@@ -57,7 +57,42 @@ L = sum(L_ind) + sum(L_cons) + sum(L_com) + sum(L_serv)
 
 % ------ PLOTS ------
 
-figure(1)
+% figure(1)
+% subplot(2,2,1)
+% hist(L_ind)
+% title('Industrial')
+% 
+% subplot(2,2,2)
+% hist(L_cons)
+% title('Construcción')
+% 
+% subplot(2,2,3)
+% hist(L_com)
+% title('Comercio')
+% 
+% subplot(2,2,4)
+% hist(L_serv)
+% title('Servicios')
+% 
+% figure(2)
+% subplot(2,2,1)
+% boxplot(L_ind)
+% title('Industrial')
+% 
+% subplot(2,2,2)
+% boxplot(L_cons)
+% title('Construcción')
+% 
+% subplot(2,2,3)
+% boxplot(L_com)
+% title('Comercio')
+% 
+% subplot(2,2,4)
+% boxplot(L_serv)
+% title('Servicios')
+
+
+h = figure(1)
 subplot(2,2,1)
 hist(L_ind)
 title('Industrial')
@@ -74,7 +109,9 @@ subplot(2,2,4)
 hist(L_serv)
 title('Servicios')
 
-figure(2)
+saveas(h,'../output/histogramas_individual.jpg')
+
+h = figure(2)
 subplot(2,2,1)
 boxplot(L_ind)
 title('Industrial')
@@ -90,6 +127,8 @@ title('Comercio')
 subplot(2,2,4)
 boxplot(L_serv)
 title('Servicios')
+
+saveas(h,'../output/boxplots_individual.jpg')
 
 % ------ ESTADÍSTICOS ------
 mu(1) = mean(L_ind); mu(2) = mean(L_cons); mu(3) = mean(L_com); mu(4) = mean(L_serv);
@@ -153,7 +192,7 @@ L = sum(L_ind) + sum(L_cons) + sum(L_com) + sum(L_serv)
 
 %------ PLOTS ------
 
-figure(1)
+h = figure(1)
 subplot(2,2,1)
 hist(L_ind)
 title('Industrial')
@@ -170,7 +209,9 @@ subplot(2,2,4)
 hist(L_serv)
 title('Servicios')
 
-figure(2)
+saveas(h,'../output/histogramas_colectivo.jpg')
+
+h = figure(2)
 subplot(2,2,1)
 boxplot(L_ind)
 title('Industrial')
@@ -186,6 +227,8 @@ title('Comercio')
 subplot(2,2,4)
 boxplot(L_serv)
 title('Servicios')
+
+saveas(h,'../output/boxplots_colectivo.jpg')
 
 % ------ ESTADÍSTICOS ------
 mu(1) = mean(L_ind); mu(2) = mean(L_cons); mu(3) = mean(L_com); mu(4) = mean(L_serv);
