@@ -57,56 +57,25 @@ L = sum(L_ind) + sum(L_cons) + sum(L_com) + sum(L_serv)
 
 % ------ PLOTS ------
 
-% figure(1)
-% subplot(2,2,1)
-% hist(L_ind)
-% title('Industrial')
-% 
-% subplot(2,2,2)
-% hist(L_cons)
-% title('Construcción')
-% 
-% subplot(2,2,3)
-% hist(L_com)
-% title('Comercio')
-% 
-% subplot(2,2,4)
-% hist(L_serv)
-% title('Servicios')
-% 
-% figure(2)
-% subplot(2,2,1)
-% boxplot(L_ind)
-% title('Industrial')
-% 
-% subplot(2,2,2)
-% boxplot(L_cons)
-% title('Construcción')
-% 
-% subplot(2,2,3)
-% boxplot(L_com)
-% title('Comercio')
-% 
-% subplot(2,2,4)
-% boxplot(L_serv)
-% title('Servicios')
-
-
 h = figure(1)
 subplot(2,2,1)
-hist(L_ind)
+hist(L_ind, 20)
+xlim([0,max(L_ind)])
 title('Industrial')
 
 subplot(2,2,2)
-hist(L_cons)
+hist(L_cons, 20)
+xlim([0,max(L_cons)])
 title('Construcción')
 
 subplot(2,2,3)
-hist(L_com)
+hist(L_com, 20)
+xlim([0,max(L_com)])
 title('Comercio')
 
 subplot(2,2,4)
-hist(L_serv)
+hist(L_serv, 20)
+xlim([0,max(L_serv)])
 title('Servicios')
 
 saveas(h,'../output/histogramas_individual.jpg')
@@ -129,6 +98,7 @@ boxplot(L_serv)
 title('Servicios')
 
 saveas(h,'../output/boxplots_individual.jpg')
+close all;
 
 % ------ ESTADÍSTICOS ------
 mu(1) = mean(L_ind); mu(2) = mean(L_cons); mu(3) = mean(L_com); mu(4) = mean(L_serv);
@@ -194,19 +164,23 @@ L = sum(L_ind) + sum(L_cons) + sum(L_com) + sum(L_serv)
 
 h = figure(1)
 subplot(2,2,1)
-hist(L_ind)
+hist(L_ind, 20)
+xlim([0,max(L_ind)])
 title('Industrial')
 
 subplot(2,2,2)
-hist(L_cons)
+hist(L_cons, 20)
+xlim([0,max(L_cons)])
 title('Construcción')
 
 subplot(2,2,3)
-hist(L_com)
+hist(L_com, 20)
+xlim([0,max(L_com)])
 title('Comercio')
 
 subplot(2,2,4)
-hist(L_serv)
+hist(L_serv, 20)
+xlim([0,max(L_serv)])
 title('Servicios')
 
 saveas(h,'../output/histogramas_colectivo.jpg')
@@ -229,6 +203,7 @@ boxplot(L_serv)
 title('Servicios')
 
 saveas(h,'../output/boxplots_colectivo.jpg')
+close all;
 
 % ------ ESTADÍSTICOS ------
 mu(1) = mean(L_ind); mu(2) = mean(L_cons); mu(3) = mean(L_com); mu(4) = mean(L_serv);
@@ -248,19 +223,71 @@ k_gen = kurtosis([L_ind;L_cons;L_com;L_serv])
 sesgo = skewness([L_ind;L_cons;L_com;L_serv])
 
 %% Variables antitéticas
+L_ind = zeros(n_sim(1),1);
+L_cons = zeros(n_sim(2),1);
+L_com = zeros(n_sim(3),1);
+L_serv = zeros(n_sim(4),1);
 
-% Probabilidades dadas de incumplimiento por grupo:
-p=[0.007,0.009,0.0065,0.0060]';
+tic;
+for i = 1:max(n_sim)
+    [ I_ind, I_cons, I_com, I_serv ] = individual_antitetico(u,rho_tilde, tam, rho_dif);
+    L_ind(i) = I_ind'*industrial;
+    L_cons(i) = I_cons'*construccion;
+    L_com(i) = I_com'*comercio;
+    L_serv(i) = I_serv'*servicios;
+end
+K = [sum(I_ind);sum(I_cons);sum(I_com);sum(I_serv)];
+L_ind = L_ind(1:n_sim(1));
+L_cons = L_cons(1:n_sim(2));
+L_com = L_com(1:n_sim(3));
+L_serv = L_serv(1:n_sim(4));
+L = sum(L_ind) + sum(L_cons) + sum(L_com) + sum(L_serv)
 
-% Media teórica:
-mu = [sum(industrial), sum(construccion), sum(comercio), sum(servicios)]*p;
+% ------ PLOTS ------
 
 
+h = figure(1)
+subplot(2,2,1)
+hist(L_ind, 20)
+xlim([0,max(L_ind)])
+title('Industrial')
 
+subplot(2,2,2)
+hist(L_cons, 20)
+xlim([0,max(L_cons)])
+title('Construcción')
 
+subplot(2,2,3)
+hist(L_com, 20)
+xlim([0,max(L_com)])
+title('Comercio')
 
+subplot(2,2,4)
+hist(L_serv, 20)
+xlim([0,max(L_serv)])
+title('Servicios')
 
+saveas(h,'../output/histogramas_individual_antitetico.jpg')
 
+h = figure(2)
+subplot(2,2,1)
+boxplot(L_ind)
+title('Industrial')
+
+subplot(2,2,2)
+boxplot(L_cons)
+title('Construcción')
+
+subplot(2,2,3)
+boxplot(L_com)
+title('Comercio')
+
+subplot(2,2,4)
+boxplot(L_serv)
+title('Servicios')
+
+saveas(h,'../output/boxplots_individual_antitetico.jpg')
+close all;
 
 
 
